@@ -6,6 +6,8 @@ import 'package:xmltool/domain/entities/mau09_document.dart';
 import 'package:xmltool/domain/entities/mau09_row.dart';
 import 'package:xmltool/presentation/blocs/mau09/mau09_event.dart';
 
+export 'package:xmltool/presentation/blocs/mau09/mau09_event.dart';
+
 class Mau09Bloc extends Bloc<Mau09Event, Mau09State> {
   final GenerateMau09UseCase generateMau09UseCase;
   final ExportUseCase exportUseCase;

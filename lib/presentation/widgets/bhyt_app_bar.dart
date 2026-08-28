@@ -29,18 +29,25 @@ class BHYTAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: const EdgeInsets.all(6),
+            width: 32,
+            height: 32,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: isDark ? 0.25 : 0.12),
+              color: isDark ? const Color(0xFF1E293B) : Colors.white,
               borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
             ),
-            child: const Icon(
-              Icons.healing_rounded,
-              color: AppColors.primary,
-              size: 20,
+            clipBehavior: Clip.antiAlias,
+            child: Image.asset(
+              'assets/images/app_logo.png',
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => const Icon(
+                Icons.healing_rounded,
+                color: AppColors.primary,
+                size: 20,
+              ),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 10),
           Flexible(
             child: Text(
               title,

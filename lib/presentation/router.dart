@@ -7,35 +7,44 @@ import 'package:xmltool/presentation/pages/export_page.dart';
 import 'package:xmltool/presentation/pages/import_page.dart';
 import 'package:xmltool/presentation/pages/overview_page.dart';
 import 'package:xmltool/presentation/pages/settings_page.dart';
+import 'package:xmltool/presentation/widgets/main_shell.dart';
 
-/// Application router configuration using GoRouter with Talker observer.
+/// Application router configuration using GoRouter with ShellRoute and Talker observer.
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   observers: [TalkerRouteObserver(appTalker)],
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const ImportPage(),
-    ),
-    GoRoute(
-      path: '/overview',
-      builder: (context, state) => const OverviewPage(),
-    ),
-    GoRoute(
-      path: '/detail',
-      builder: (context, state) => const DetailPage(),
-    ),
-    GoRoute(
-      path: '/export',
-      builder: (context, state) => const ExportPage(),
-    ),
-    GoRoute(
-      path: '/settings',
-      builder: (context, state) => const SettingsPage(),
-    ),
-    GoRoute(
-      path: '/audit',
-      builder: (context, state) => const AuditLogPage(),
+    ShellRoute(
+      builder: (context, state, child) => MainShell(
+        state: state,
+        child: child,
+      ),
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const ImportPage(),
+        ),
+        GoRoute(
+          path: '/overview',
+          builder: (context, state) => const OverviewPage(),
+        ),
+        GoRoute(
+          path: '/detail',
+          builder: (context, state) => const DetailPage(),
+        ),
+        GoRoute(
+          path: '/export',
+          builder: (context, state) => const ExportPage(),
+        ),
+        GoRoute(
+          path: '/settings',
+          builder: (context, state) => const SettingsPage(),
+        ),
+        GoRoute(
+          path: '/audit',
+          builder: (context, state) => const AuditLogPage(),
+        ),
+      ],
     ),
   ],
 );

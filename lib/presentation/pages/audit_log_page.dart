@@ -4,7 +4,6 @@ import 'package:xmltool/config/theme/app_colors.dart';
 import 'package:xmltool/presentation/blocs/audit/audit_bloc.dart';
 import 'package:xmltool/presentation/blocs/audit/audit_event.dart';
 import 'package:xmltool/presentation/widgets/audit_log_trina_grid.dart';
-import 'package:xmltool/presentation/widgets/bhyt_app_bar.dart';
 
 /// Screen for viewing persistent reconciliation history with trina_grid and Talker diagnostics.
 class AuditLogPage extends StatefulWidget {
@@ -21,74 +20,89 @@ class _AuditLogPageState extends State<AuditLogPage> {
     context.read<AuditBloc>().add(const AuditLoadRequested());
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: BHYTAppBar(
-        title: 'Lịch Sử & Nhật Ký Kiểm Toán (Audit)',
-        extraActions: [
-          IconButton(
-            icon: const Icon(Icons.delete_sweep_outlined),
-            tooltip: 'Xóa toàn bộ lịch sử',
+  void _confirmClearHistory(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Xác nhận xóa lịch sử'),
+        content: const Text('Bạn có chắc chắn muốn xóa toàn bộ lịch sử đối soát trong cơ sở dữ liệu SQLite không?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Hủy'),
+          ),
+          ElevatedButton(
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  title: const Text('Xác nhận xóa lịch sử'),
-                  content: const Text('Bạn có chắc chắn muốn xóa toàn bộ lịch sử đối soát trong cơ sở dữ liệu SQLite không?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(ctx).pop(),
-                      child: const Text('Hủy'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<AuditBloc>().add(const AuditClearRequested());
-                        Navigator.of(ctx).pop();
-                      },
-                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-                      child: const Text('Xóa tất cả', style: TextStyle(color: Colors.white)),
-                    ),
-                  ],
-                ),
-              );
+              context.read<AuditBloc>().add(const AuditClearRequested());
+              Navigator.of(ctx).pop();
             },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            child: const Text('Xóa tất cả', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
-      body: BlocBuilder<AuditBloc, AuditState>(
-        builder: (context, state) {
-          if (state.status == AuditStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    );
+  }
 
-          if (state.entries.isEmpty) {
-            return Center(
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuditBloc, AuditState>(
+      builder: (context, state) {
+        if (state.status == AuditStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state.entries.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.history_toggle_off, size: 48, color: Colors.grey.shade400),
+                const SizedBox(height: 12),
+                const Text(
+                  'Chưa có phiên đối soát nào được ghi nhận trong cơ sở dữ liệu.',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(Icons.history_toggle_off, size: 48, color: Colors.grey.shade400),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Chưa có phiên đối soát nào được ghi nhận.',
-                    style: TextStyle(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Danh Sách Các Phiên Đối Soát (${state.entries.length} phiên)',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      OutlinedButton.icon(
+                        onPressed: () => _confirmClearHistory(context),
+                        icon: const Icon(Icons.delete_sweep_outlined, size: 18, color: AppColors.error),
+                        label: const Text('Xóa toàn bộ lịch sử', style: TextStyle(color: AppColors.error)),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: AppColors.error),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Expanded(
+                    child: AuditLogTrinaGrid(entries: state.entries),
                   ),
                 ],
               ),
-            );
-          }
-
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: AuditLogTrinaGrid(entries: state.entries),
-              ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

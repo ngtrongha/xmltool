@@ -5,8 +5,6 @@ import 'package:xmltool/config/theme/app_colors.dart';
 import 'package:xmltool/domain/entities/record_change.dart';
 import 'package:xmltool/domain/value_objects/change_type.dart';
 import 'package:xmltool/presentation/blocs/compare/compare_bloc.dart';
-import 'package:xmltool/presentation/blocs/compare/compare_event.dart';
-import 'package:xmltool/presentation/widgets/bhyt_app_bar.dart';
 import 'package:xmltool/presentation/widgets/field_change_row.dart';
 import 'package:xmltool/presentation/widgets/xml_type_badge.dart';
 
@@ -31,11 +29,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: const BHYTAppBar(
-        title: 'Chi Tiết Bản Ghi & Đối Soát',
-      ),
-      body: BlocBuilder<CompareBloc, CompareState>(
+    return BlocBuilder<CompareBloc, CompareState>(
         builder: (context, state) {
           if (state.result == null) {
             return const Center(child: Text('Chưa có dữ liệu đối soát'));
@@ -267,8 +261,7 @@ class _DetailPageState extends State<DetailPage> {
             ],
           );
         },
-      ),
-    );
+      );
   }
 
   Widget _buildRecordCard(BuildContext context, RecordChange record) {

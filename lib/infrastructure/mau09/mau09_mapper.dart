@@ -16,7 +16,7 @@ class Mau09Mapper {
     required CompareResult compareResult,
     required XmlEnvelope newEnvelope,
     XmlEnvelope? oldEnvelope,
-    String defaultReason = 'Điều chỉnh thông tin/chi phí theo hồ sơ bệnh án',
+    String defaultReason = 'Điều chỉnh số lượng/đơn giá thuốc đúng theo hồ sơ bệnh án và hóa đơn thầu',
   }) {
     final hoSoList = <Mau09HoSo>[];
 

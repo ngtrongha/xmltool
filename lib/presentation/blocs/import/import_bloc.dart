@@ -3,6 +3,8 @@ import 'package:xmltool/application/usecases/import_xml_usecase.dart';
 import 'package:xmltool/core/logging/app_talker.dart';
 import 'package:xmltool/presentation/blocs/import/import_event.dart';
 
+export 'package:xmltool/presentation/blocs/import/import_event.dart';
+
 class ImportBloc extends Bloc<ImportEvent, ImportState> {
   final ImportXmlUseCase importXmlUseCase;
 

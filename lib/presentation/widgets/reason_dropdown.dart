@@ -15,12 +15,26 @@ class ReasonDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reasons = AdjustmentReason.defaults.map((r) => r.description).toList();
+    final defaultReasons = AdjustmentReason.defaults.map((r) => r.description).toList();
+
+    // Create a mutable copy of default reasons
+    final items = List<String>.from(defaultReasons);
+
+    // If initialReason is specified and not in the default list, include it
+    if (initialReason != null &&
+        initialReason!.trim().isNotEmpty &&
+        !items.contains(initialReason!.trim())) {
+      items.insert(0, initialReason!.trim());
+    }
+
+    final selectedItem = (initialReason != null && initialReason!.trim().isNotEmpty)
+        ? (items.contains(initialReason!.trim()) ? initialReason!.trim() : items.first)
+        : items.first;
 
     return CustomDropdown<String>.search(
       hintText: 'Chọn lý do điều chỉnh...',
-      items: reasons,
-      initialItem: initialReason ?? reasons.first,
+      items: items,
+      initialItem: selectedItem,
       onChanged: (value) {
         if (value != null) {
           onReasonChanged(value);

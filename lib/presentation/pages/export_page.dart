@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xmltool/config/theme/app_colors.dart';
 import 'package:xmltool/presentation/blocs/compare/compare_bloc.dart';
 import 'package:xmltool/presentation/blocs/mau09/mau09_bloc.dart';
-import 'package:xmltool/presentation/blocs/mau09/mau09_event.dart';
-import 'package:xmltool/presentation/widgets/bhyt_app_bar.dart';
 import 'package:xmltool/presentation/widgets/mau09_trina_grid.dart';
 import 'package:xmltool/presentation/widgets/reason_dropdown.dart';
 
@@ -49,11 +47,7 @@ class ExportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: const BHYTAppBar(
-        title: 'Xem Trước & Xuất Mẫu 09/BH',
-      ),
-      body: BlocConsumer<Mau09Bloc, Mau09State>(
+    return BlocConsumer<Mau09Bloc, Mau09State>(
         listener: (context, state) {
           if (state.status == Mau09Status.exportSuccess && state.message != null) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -225,7 +219,6 @@ class ExportPage extends StatelessWidget {
             ],
           );
         },
-      ),
-    );
+      );
   }
 }

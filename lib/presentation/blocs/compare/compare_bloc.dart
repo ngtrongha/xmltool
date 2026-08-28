@@ -6,6 +6,8 @@ import 'package:xmltool/domain/entities/audit_entry.dart';
 import 'package:xmltool/domain/repositories/audit_repository.dart';
 import 'package:xmltool/presentation/blocs/compare/compare_event.dart';
 
+export 'package:xmltool/presentation/blocs/compare/compare_event.dart';
+
 class CompareBloc extends Bloc<CompareEvent, CompareState> {
   final CompareXmlUseCase compareXmlUseCase;
   final AuditRepository? auditRepository;
