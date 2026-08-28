@@ -48,7 +48,14 @@ class Mau09XmlGenerator {
       });
 
       // 3. CHUKYSO
-      builder.element('CHUKYSO', nest: document.chuKySo ?? '');
+      final sig = document.chuKySo;
+      if (sig != null && sig.trim().startsWith('<')) {
+        builder.element('CHUKYSO', nest: () {
+          builder.xml(sig);
+        });
+      } else {
+        builder.element('CHUKYSO', nest: sig ?? '');
+      }
     });
 
     return builder.buildDocument();

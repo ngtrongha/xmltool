@@ -17,6 +17,7 @@ import 'package:xmltool/infrastructure/database/app_database.dart';
 import 'package:xmltool/infrastructure/repositories/drift_audit_repository.dart';
 import 'package:xmltool/infrastructure/repositories/export_repository_impl.dart';
 import 'package:xmltool/infrastructure/repositories/in_memory_repositories.dart';
+import 'package:xmltool/infrastructure/security/bhyt_digital_signer.dart';
 import 'package:xmltool/infrastructure/xml/xml_parser.dart';
 import 'package:xmltool/presentation/blocs/audit/audit_bloc.dart';
 import 'package:xmltool/presentation/blocs/compare/compare_bloc.dart';
@@ -37,12 +38,13 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton<ExportRepository>(() => ExportRepositoryImpl());
   getIt.registerLazySingleton<AuditRepository>(() => DriftAuditRepository(getIt<AppDatabase>()));
 
-  // 2. Services
+  // 2. Services & Security
   getIt.registerLazySingleton<XmlParseService>(() => XmlParseService(getIt<XmlFileRepository>()));
   getIt.registerLazySingleton<CompareService>(() => CompareService());
   getIt.registerLazySingleton<Mau09MappingService>(() => Mau09MappingService());
   getIt.registerLazySingleton<XmlGenerationService>(() => XmlGenerationService());
   getIt.registerLazySingleton<ValidationService>(() => ValidationService());
+  getIt.registerLazySingleton<BHYTDigitalSigner>(() => BHYTDigitalSigner());
 
   // 3. UseCases
   getIt.registerFactory<ImportXmlUseCase>(() => ImportXmlUseCase(
@@ -72,6 +74,8 @@ Future<void> configureDependencies() async {
   getIt.registerFactory<Mau09Bloc>(() => Mau09Bloc(
         generateMau09UseCase: getIt<GenerateMau09UseCase>(),
         exportUseCase: getIt<ExportUseCase>(),
+        digitalSigner: getIt<BHYTDigitalSigner>(),
+        xmlGenerationService: getIt<XmlGenerationService>(),
       ));
   getIt.registerFactory<AuditBloc>(() => AuditBloc(auditRepository: getIt<AuditRepository>()));
 }

@@ -51,6 +51,8 @@ dependencies:
   path_provider: ^2.1.5
   path: ^1.9.1
   trina_grid: ^2.3.0
+  pointycastle: ^3.9.1
+  basic_utils: ^5.7.0
 
 dev_dependencies:
   flutter_test:

@@ -36,12 +36,19 @@ Phần mềm chuyên dụng đối soát hồ sơ khám chữa bệnh (KCB) Bả
   3. `Mau09_DieuChinh`: Bảng kê 16 cột chuẩn Mẫu 09 phục vụ nộp cơ quan BHXH.
 - **Bulk Reason Toolbar:** Công cụ chọn và áp dụng lý do điều chỉnh hàng loạt cho toàn bộ danh sách chỉ bằng 1 thao tác.
 
-### 5. Giao Diện Desktop Chuyên Nghiệp (Medical UI & TrinaGrid)
+### 5. Ký Số Điện Tử Đạt Chuẩn Cổng BHXH (XMLDSig RSA-SHA256)
+- **Chuẩn pháp lý:** Tuân thủ **Nghị định 130/2018/NĐ-CP** và **Thông tư 18/2022/TT-BTTTT** về quy định chữ ký số cho văn bản điện tử ngành y tế & bảo hiểm.
+- **Cấu trúc XMLDSig W3C:** Tự động tính toán Canonicalization (`C14N`), băm dữ liệu `SHA-256` (`DigestValue`), ký số khóa bảo mật `RSA 2048-bit` (`SignatureValue`) và nhúng khối `<Signature>` vào thẻ `<CHUKYSO>`.
+- **Tương thích toàn diện:** Hỗ trợ mọi nhà cung cấp chứng thực chữ ký số công cộng (VNPT-CA, Viettel-CA, BKAV-CA, FPT-CA, MISA-CA, Ban Cơ yếu Chính phủ).
+- **Kiểm tra tính toàn vẹn (Integrity Check):** Tự động cảnh báo tức thì nếu nội dung XML bị can thiệp/chỉnh sửa sau khi ký.
+
+### 6. Giao Diện Desktop Chuyên Nghiệp (Medical UI & TrinaGrid)
+- **Kiến trúc Desktop Master Shell:** Thanh điều hướng Sidebar cố định 250px, chuyển đổi mượt qua `ShellRoute`.
 - **Hệ thống Giao diện Sáng/Tối (Light & Dark Mode):** Chuyển đổi mượt mà với bảng màu Medical Teal (`#0D9488`) và Slate 900 (`#0F172A`).
 - **Bảng dữ liệu TrinaGrid (`trina_grid: ^2.3.0`):** Hỗ trợ cố định cột (frozen columns), sắp xếp, lọc dữ liệu trực tiếp trên từng cột và điều hướng bằng bàn phím.
 - **Side-by-Side Diff Viewer:** Trực quan hóa giá trị cũ (đỏ) và giá trị mới (xanh) kết hợp tìm kiếm TypeAhead.
 
-### 6. Quản Lý Nhật Ký Kiểm Toán (Audit Trail SQLite)
+### 7. Quản Lý Nhật Ký Kiểm Toán (Audit Trail SQLite)
 - Lưu vết lịch sử toàn bộ các phiên đối soát vào cơ sở dữ liệu SQLite cục bộ qua `Drift`.
 - Tự động ghi nhận mã băm SHA-256 của tệp đầu vào, thời điểm thực hiện và số lượng bản ghi điều chỉnh.
 - Tích hợp màn hình chẩn đoán **Talker Monitor** theo dõi toàn bộ runtime logs và BLoC transitions.

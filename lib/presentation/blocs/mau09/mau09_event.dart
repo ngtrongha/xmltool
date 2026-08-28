@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:equatable/equatable.dart';
+import 'package:pointycastle/export.dart' as pc;
 import 'package:xmltool/domain/entities/compare_result.dart';
+import 'package:xmltool/domain/entities/digital_certificate.dart';
 import 'package:xmltool/domain/entities/mau09_document.dart';
+import 'package:xmltool/domain/entities/signature_info.dart';
 import 'package:xmltool/domain/entities/validation_result.dart';
 import 'package:xmltool/domain/entities/xml_envelope.dart';
 
@@ -22,7 +25,7 @@ class Mau09GenerateRequested extends Mau09Event {
     required this.compareResult,
     required this.newEnvelope,
     this.oldEnvelope,
-    this.defaultReason = 'Điều chỉnh thông tin/chi phí theo hồ sơ bệnh án',
+    this.defaultReason = 'Điều chỉnh số lượng/đơn giá thuốc đúng theo hồ sơ bệnh án và hóa đơn thầu',
   });
 
   @override
@@ -69,12 +72,46 @@ class Mau09ExportExcelRequested extends Mau09Event {
   List<Object?> get props => [compareResult, targetPath];
 }
 
-enum Mau09Status { initial, loading, generated, exporting, exportSuccess, failure }
+/// Applies a digital signature using an RSA private key and certificate.
+class Mau09DigitalSignatureApplied extends Mau09Event {
+  final pc.RSAPrivateKey privateKey;
+  final DigitalCertificate certificate;
+
+  const Mau09DigitalSignatureApplied({
+    required this.privateKey,
+    required this.certificate,
+  });
+
+  @override
+  List<Object?> get props => [privateKey, certificate];
+}
+
+/// Verifies current digital signature.
+class Mau09SignatureVerified extends Mau09Event {
+  const Mau09SignatureVerified();
+}
+
+/// Clears digital signature.
+class Mau09SignatureCleared extends Mau09Event {
+  const Mau09SignatureCleared();
+}
+
+enum Mau09Status {
+  initial,
+  loading,
+  generated,
+  signing,
+  signed,
+  exporting,
+  exportSuccess,
+  failure,
+}
 
 class Mau09State extends Equatable {
   final Mau09Status status;
   final Mau09Document? document;
   final ValidationResult? validationResult;
+  final SignatureInfo signatureInfo;
   final File? exportedFile;
   final String? message;
   final String? errorMessage;
@@ -83,6 +120,7 @@ class Mau09State extends Equatable {
     this.status = Mau09Status.initial,
     this.document,
     this.validationResult,
+    this.signatureInfo = const SignatureInfo(isSigned: false),
     this.exportedFile,
     this.message,
     this.errorMessage,
@@ -92,6 +130,7 @@ class Mau09State extends Equatable {
     Mau09Status? status,
     Mau09Document? document,
     ValidationResult? validationResult,
+    SignatureInfo? signatureInfo,
     File? exportedFile,
     String? message,
     String? errorMessage,
@@ -100,6 +139,7 @@ class Mau09State extends Equatable {
       status: status ?? this.status,
       document: document ?? this.document,
       validationResult: validationResult ?? this.validationResult,
+      signatureInfo: signatureInfo ?? this.signatureInfo,
       exportedFile: exportedFile ?? this.exportedFile,
       message: message,
       errorMessage: errorMessage,
@@ -111,6 +151,7 @@ class Mau09State extends Equatable {
         status,
         document,
         validationResult,
+        signatureInfo,
         exportedFile,
         message,
         errorMessage,
