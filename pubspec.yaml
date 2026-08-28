@@ -1,0 +1,65 @@
+name: xmltool
+description: "BHYT XML Adjustment & Reconciliation Tool"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State Management
+  flutter_bloc: ^9.1.1
+  bloc: ^9.0.0
+
+  # Data Modeling & Immutability
+  freezed_annotation: ^3.1.0
+  equatable: ^2.0.7
+
+  # Dependency Injection
+  get_it: ^8.0.3
+
+  # Logging & Diagnostics
+  talker_flutter: ^4.6.16
+  talker_bloc_logger: ^4.6.16
+
+  # UI Components & Indicators
+  custom_refresh_indicator: ^3.0.0
+  diffutil_dart: ^4.0.1
+  flutter_typeahead: ^5.2.0
+  getwidget: ^4.0.0
+  animated_custom_dropdown: ^3.1.1
+  google_fonts: ^6.2.1
+
+  # XML & Data Handling
+  xml: ^6.5.0
+  excel: ^4.0.6
+  crypto: ^3.0.6
+  intl: ^0.20.2
+
+  # Database (Drift / SQLite)
+  drift: ^2.24.2
+  sqlite3_flutter_libs: ^0.5.28
+
+  # Navigation & File System
+  go_router: ^14.8.1
+  file_picker: ^8.1.7
+  path_provider: ^2.1.5
+  path: ^1.9.1
+  trina_grid: ^2.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  freezed: ^3.1.0
+  drift_dev: ^2.24.2
+  build_runner: ^2.4.15
+  bloc_test: ^10.0.0
+
+flutter:
+  uses-material-design: true
